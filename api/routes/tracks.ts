@@ -27,14 +27,26 @@ tracksRouter.post('/', async (req, res, next) => {
 tracksRouter.get('/', async (req, res, next) => {
   try {
     let results;
+    let _id: Types.ObjectId;
     if (req.query.album) {
-      let _id: Types.ObjectId;
       try {
         _id = new Types.ObjectId(req.query.album as string);
       } catch {
         return res.status(404).send({error: 'Wrong album'});
       }
       results = await Tracks.find({album: _id});
+    } else if (req.query.artist) {
+      try {
+        _id = new Types.ObjectId(req.query.artist as string);
+      } catch {
+        return res.status(404).send({error: 'Wrong artist'});
+      }
+      results =  await Tracks.find().populate({
+        path: 'album',
+        match: { author: _id },
+      });
+      const filterTracks = results.filter(track => track.album !== null);
+      return res.send(filterTracks);
     } else {
       results = await Tracks.find();
     }
