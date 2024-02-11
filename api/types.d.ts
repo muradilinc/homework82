@@ -10,3 +10,9 @@ export interface Album {
   release: Date;
   image: string | null;
 }
+
+export interface Track {
+  title: string;
+  album: string;
+  duration: string | null;
+}
