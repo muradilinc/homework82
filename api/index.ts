@@ -4,6 +4,7 @@ import config from "./config";
 import artistsRouter from "./routes/artists";
 import albumsRouter from "./routes/albums";
 import tracksRouter from "./routes/tracks";
+import usersRouter from "./routes/users";
 
 const app = express();
 const port = 8000;
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/artists', artistsRouter);
 app.use('/albums', albumsRouter);
 app.use('/tracks', tracksRouter);
+app.use('/users', usersRouter);
 
 const run = async () => {
   await mongoose.connect(config.mongoose.db);
