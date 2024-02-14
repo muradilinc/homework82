@@ -2,6 +2,8 @@ import express from "express";
 import {Track} from "../types";
 import Tracks from "../models/Tracks";
 import mongoose, {Types} from "mongoose";
+import User from "../models/User";
+import TrackHistory from "../models/TrackHistory";
 
 const tracksRouter = express.Router();
 
@@ -51,6 +53,31 @@ tracksRouter.get('/', async (req, res, next) => {
       results = await Tracks.find();
     }
     return res.send(results);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+tracksRouter.post('/track_history', async (req, res, next) => {
+  try {
+    const token = req.get('Authorization');
+    if (!token) {
+      return res.status(401).send({error: 'No token present'});
+    }
+
+    const user = await User.findOne({token});
+
+    if (!user) {
+      return res.status(401).send({error: 'Unauthorized!'});
+    }
+
+    const tracks = new TrackHistory({
+      user: user._id,
+      track: req.body.track,
+      datetime: new Date().toISOString(),
+    });
+
+    return res.send(tracks);
   } catch (error) {
     return next(error);
   }
