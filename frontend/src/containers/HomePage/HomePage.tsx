@@ -12,10 +12,10 @@ const HomePage = () => {
 
   return (
     <div>
-      <h2 className="text-3xl">Добрый вечер</h2>
+      <h2 className="text-3xl font-bold">Добрый вечер</h2>
       <div className="my-[30px] bg-gradient-to-b from-indigo-500 from-5% via-5% to-55% p-[20px] rounded-[8px]">
         <div>
-          <h4 className="text-xl">Artists</h4>
+          <h4 className="text-xl font-bold">Artists</h4>
           <Cards />
         </div>
       </div>
