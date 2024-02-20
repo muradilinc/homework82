@@ -11,7 +11,7 @@ albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
     const albumData: Album = {
       title: req.body.title,
       author: req.body.author,
-      release: new Date(req.body.release),
+      release: req.body.release,
       image: req.file ? req.file.filename : null,
     };
 
