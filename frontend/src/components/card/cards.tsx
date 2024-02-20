@@ -1,14 +1,21 @@
-import { useAppSelector } from '../../app/hooks';
-import { selectArtists } from '../../store/artists/artistsSlice';
+import React from 'react';
 import CardItem from './cardItem';
+import { Link } from 'react-router-dom';
+import { routes } from '../../constants/routes';
+import { Album, Artist, Routes } from '../../type';
 
-const Cards = () => {
-  const artists = useAppSelector(selectArtists);
+interface Props {
+  route: keyof Routes;
+  data: Artist[] | Album[];
+}
 
+const Cards: React.FC<Props> = ({ data, route }) => {
   return (
     <div className="grid grid-cols-7 gap-[24px] min-w-[372px] my-[10px]">
-      {artists.map((artist) => (
-        <CardItem artist={artist} />
+      {data.map((item) => (
+        <Link to={routes[route] + '/' + item._id}>
+          <CardItem item={item} />
+        </Link>
       ))}
     </div>
   );

@@ -3,6 +3,8 @@ import HomePage from '../HomePage/HomePage';
 import NotPage from '../NotPage/NotPage';
 import { routes } from '../../constants/routes';
 import Layout from '../../components/Layout/Layout';
+import ArtistPage from '../ArtistPage/ArtistPage';
+import AlbumsPage from '../AlbumsPage/AlbumsPage';
 
 const App = () => {
   return (
@@ -10,6 +12,8 @@ const App = () => {
       <Layout>
         <Routes>
           <Route path={routes.home} element={<HomePage />} />
+          <Route path={routes.artists + '/:id'} element={<ArtistPage />} />
+          <Route path={routes.albums + '/:id'} element={<AlbumsPage />} />
           <Route path={routes.notPage} element={<NotPage />} />
         </Routes>
       </Layout>

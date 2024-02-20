@@ -31,7 +31,16 @@ artistsRouter.post(
 artistsRouter.get('/', async (_req, res, next) => {
   try {
     const results = await Artists.find();
-    res.send(results);
+    return res.send(results);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+artistsRouter.get('/:id', async (req, res, next) => {
+  try {
+    const results = await Artists.findOne({ _id: req.params.id });
+    return res.send(results);
   } catch (error) {
     return next(error);
   }

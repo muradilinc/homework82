@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getAllArtists } from '../../store/artists/artistsThunk';
 import Cards from '../../components/card/cards';
+import { selectArtists } from '../../store/artists/artistsSlice';
 
 const HomePage = () => {
+  const artists = useAppSelector(selectArtists);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -16,7 +18,7 @@ const HomePage = () => {
       <div className="my-[30px] bg-gradient-to-b from-indigo-500 from-5% via-5% to-55% p-[20px] rounded-[8px]">
         <div>
           <h4 className="text-xl font-bold">Artists</h4>
-          <Cards />
+          <Cards data={artists} route={'artists'} />
         </div>
       </div>
     </div>
