@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import Artists from "./Artists";
+import mongoose from 'mongoose';
+import Artists from './Artists';
 
 const albumsSchema = new mongoose.Schema({
   title: {

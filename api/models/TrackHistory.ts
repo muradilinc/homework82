@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import {TrackHistory, TrackHistoryModel} from "../types";
+import mongoose from 'mongoose';
+import { TrackHistory, TrackHistoryModel } from '../types';
 
 const Schema = mongoose.Schema;
 
@@ -18,6 +18,9 @@ const trackHistorySchema = new Schema<TrackHistory, TrackHistoryModel>({
   },
 });
 
-const TrackHistory = mongoose.model<TrackHistory, TrackHistoryModel>('TrackHistory', trackHistorySchema);
+const TrackHistory = mongoose.model<TrackHistory, TrackHistoryModel>(
+  'TrackHistory',
+  trackHistorySchema,
+);
 
 export default TrackHistory;

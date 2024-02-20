@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const ArtistsSchema = new mongoose.Schema({
   name: {

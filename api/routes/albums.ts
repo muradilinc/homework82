@@ -1,8 +1,8 @@
-import express from "express";
-import {Album} from "../types";
-import {imagesUpload} from "../helpers/multer";
-import Albums from "../models/Albums";
-import mongoose, {Types} from "mongoose";
+import express from 'express';
+import { Album } from '../types';
+import { imagesUpload } from '../helpers/multer';
+import Albums from '../models/Albums';
+import mongoose, { Types } from 'mongoose';
 
 const albumsRouter = express.Router();
 
@@ -34,9 +34,9 @@ albumsRouter.get('/', async (req, res, next) => {
       try {
         _id = new Types.ObjectId(req.query.artist as string);
       } catch {
-        return res.status(404).send({error: 'Wrong artist'});
+        return res.status(404).send({ error: 'Wrong artist' });
       }
-      results = await Albums.find({author: _id});
+      results = await Albums.find({ author: _id });
     } else {
       results = await Albums.find();
     }
@@ -52,9 +52,9 @@ albumsRouter.get('/:id', async (req, res, next) => {
     try {
       _id = new Types.ObjectId(req.params.id as string);
     } catch {
-      return res.status(404).send({error: 'Wrong artist'});
+      return res.status(404).send({ error: 'Wrong artist' });
     }
-    const result = await Albums.findById({_id}).populate('author');
+    const result = await Albums.findById({ _id }).populate('author');
     res.send(result);
   } catch (error) {
     return next(error);
