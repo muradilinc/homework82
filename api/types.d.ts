@@ -9,12 +9,13 @@ export interface Artist {
 export interface Album {
   title: string;
   author: string;
-  release: Date;
+  release: number;
   image: string | null;
 }
 
 export interface Track {
   title: string;
+  number: number;
   album: string;
   duration: string | null;
 }

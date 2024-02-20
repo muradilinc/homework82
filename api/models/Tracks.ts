@@ -6,6 +6,10 @@ const tracksSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  number: {
+    type: Number,
+    required: true,
+  },
   album: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Album',
