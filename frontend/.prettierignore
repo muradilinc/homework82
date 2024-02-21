@@ -8,3 +8,4 @@ package.json
 README.md
 tsconfig.json
 tsconfig.node.json
+.eslintrc.cjs
