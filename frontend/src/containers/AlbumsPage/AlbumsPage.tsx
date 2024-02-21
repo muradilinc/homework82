@@ -2,28 +2,33 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { BASE_URL } from '../../constants/link';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectAlbum } from '../../store/albums/albumsSlice';
+import {
+  selectAlbum,
+  selectGetSingleAlbumLoading,
+} from '../../store/albums/albumsSlice';
 import { getAlbum } from '../../store/albums/albumsThunk';
 import dayjs from 'dayjs';
 import { sumDuration } from '../../helpers/sumDuration';
 import { Clock } from '@phosphor-icons/react';
+import Spinner from '../../components/Spinner/Spinner';
 
 const AlbumsPage = () => {
   const { id } = useParams() as { id: string };
   const album = useAppSelector(selectAlbum);
+  const loading = useAppSelector(selectGetSingleAlbumLoading);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getAlbum(id));
   }, [dispatch, id]);
 
-  if (!album) {
-    return null;
+  if (loading || !album) {
+    return <Spinner />;
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="flex gap-x-3 items-end bg-gradient-to-b from-gray-700 to-gray-500 to-65% p-[20px] rounded-tl-[5px] rounded-tr-[5px]">
+    <div className="flex flex-col my-[10px] bg-gradient-to-b from-gray-700 rounded-tl-[5px] rounded-tr-[5px]">
+      <div className="flex gap-x-3 items-end px-[20px] pt-[80px] pb-[20px]">
         <img
           className="rounded-[5px] w-[332px]"
           src={BASE_URL + '/' + album.image}
@@ -49,18 +54,24 @@ const AlbumsPage = () => {
       </div>
       <div className="bg-gradient-to-b from-gray-700 from-15% p-[20px]">
         <div className="p-[10px] w-full">
-          <div className="grid grid-cols-3">
-            <span>#</span>
-            <div className="place-content-start">
+          <div className="grid grid-cols-12 p-[20px]">
+            <div className="col-span-11 flex gap-x-[15px]">
+              <span>#</span>
               <p className="capitalize">title</p>
             </div>
             <Clock size={20} />
           </div>
           {album.tracks.map((track, index) => (
-            <div className="grid grid-cols-3" key={track._id}>
-              <span>{index}</span>
-              <div className="place-content-start">
-                <p>{track.title}</p>
+            <div
+              className="grid grid-cols-12 hover:bg-white items-center rounded-[5px] hover:bg-opacity-5 p-[20px]"
+              key={track._id}
+            >
+              <div className="col-span-11 flex gap-x-[15px] items-center">
+                <span>{index + 1}</span>
+                <div>
+                  <p className="text-base">{track.title}</p>
+                  <span className="text-sm">{album.author.name}</span>
+                </div>
               </div>
               <p>{track.duration}</p>
             </div>

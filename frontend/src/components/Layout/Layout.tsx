@@ -1,9 +1,13 @@
 import React, { PropsWithChildren } from 'react';
+import Header from '../Header/Header';
 
 const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
-      <main className="container mx-auto py-5">{children}</main>
+      <header>
+        <Header />
+      </header>
+      <main className="container mx-auto">{children}</main>
     </>
   );
 };

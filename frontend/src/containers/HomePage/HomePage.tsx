@@ -13,11 +13,10 @@ const HomePage = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold">Добрый вечер</h2>
-      <div className="my-[30px] bg-gradient-to-b from-indigo-500 from-5% via-5% to-55% p-[20px] rounded-[8px]">
+    <div className="my-[10px]">
+      <div className="bg-gradient-to-b from-indigo-500 from-5% via-5% to-55% px-[20px] pt-[80px] pb-[20px] rounded-[8px]">
+        <h2 className="text-3xl font-bold">Добрый вечер</h2>
         <div>
-          <h4 className="text-xl font-bold">Artists</h4>
           <Cards data={artists} route={'artists'} />
         </div>
       </div>

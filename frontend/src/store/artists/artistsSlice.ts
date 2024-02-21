@@ -56,3 +56,5 @@ export const selectArtists = (state: RootState) => state.artists.artists;
 export const selectArtist = (state: RootState) => state.artists.artist;
 export const selectAllLoading = (state: RootState) =>
   state.artists.getAllLoading;
+export const selectGetSingleLoading = (state: RootState) =>
+  state.artists.getSingleLoading;

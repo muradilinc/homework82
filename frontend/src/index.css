@@ -6,3 +6,7 @@ body {
   background: black;
   color: #FFF;
 }
+
+.block {
+  cursor: not-allowed;
+}
