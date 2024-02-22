@@ -37,13 +37,22 @@ albumsRouter.get('/', async (req, res, next) => {
       } catch {
         return res.status(404).send({ error: 'Wrong artist' });
       }
-      results = await Albums.find({ author: _id }).sort({ release: -1 });
-      results = await Promise.all(
-        results.map(async (album) => {
-          const tracks = await Track.find({ album: album._id });
-          return { ...album.toObject(), tracks };
-        }),
-      );
+      results = await Albums.aggregate([
+        {
+          $match: { author: _id },
+        },
+        {
+          $sort: { release: -1 },
+        },
+        {
+          $lookup: {
+            from: 'tracks',
+            localField: '_id',
+            foreignField: 'album',
+            as: 'tracks',
+          },
+        },
+      ]);
     } else {
       results = await Albums.find();
     }
