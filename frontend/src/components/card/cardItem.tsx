@@ -16,18 +16,22 @@ const CardItem: React.FC<Props> = ({ item }) => {
   const loadingAlbum = useAppSelector(selectGetAlbumLoading);
 
   return (
-    <div className="flex flex-col gap-y-[16px] p-[16px] bg-[#181818] rounded-[8px] hover:bg-[#282828]">
+    <div className="flex flex-col gap-y-[16px] p-[16px] bg-[#181818] min-h-[261px] rounded-[8px] hover:bg-[#282828]">
       {loadingAlbum || loadingArtist ? (
         <CardSkeleton />
       ) : (
         <>
           <img
-            className={'picture' in item ? 'rounded-[50%]' : 'rounded-[5px]'}
+            className={
+              'picture' in item
+                ? 'rounded-[50%] w-[151px] h-[151px]'
+                : 'rounded-[5px] w-[151px] h-[151px]'
+            }
             src={`${BASE_URL}/${'picture' in item ? item.picture : item.image}`}
             alt="ArtistImage"
           />
           <div className="min-h-[60px]">
-            <h4 className="font-bold text-white text-base">
+            <h4 className="font-bold text-white text-base truncate">
               {'name' in item ? item.name : item.title}
             </h4>
             <p className="text-[#6a6a6a] text-sm">

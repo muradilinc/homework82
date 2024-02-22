@@ -30,9 +30,9 @@ const ArtistPage = () => {
 
   return (
     <div className="flex flex-col my-[10px] bg-gradient-to-b from-gray-700 rounded-tl-[5px] rounded-tr-[5px]">
-      <div className="flex gap-x-3 items-center px-[20px] py-[40px]">
+      <div className="flex gap-x-3 items-center px-[20px] py-[60px]">
         <img
-          className="rounded-[50%] w-[332px]"
+          className="rounded-[50%] w-[232px] h-[232px]"
           src={BASE_URL + '/' + artist.picture}
           alt="ArtistImage"
         />
