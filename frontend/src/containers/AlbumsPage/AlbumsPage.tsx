@@ -39,7 +39,7 @@ const AlbumsPage = () => {
           <h2 className="font-bold text-8xl">{album.title}</h2>
           <div className="flex items-center gap-x-[5px] mt-5">
             <img
-              className="rounded-[50%] w-[25px]"
+              className="rounded-[50%] w-[25px] h-[25px]"
               src={BASE_URL + '/' + album.author.picture}
               alt="Artist"
             />

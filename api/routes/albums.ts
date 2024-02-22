@@ -40,9 +40,7 @@ albumsRouter.get('/', async (req, res, next) => {
       results = await Albums.find({ author: _id }).sort({ release: -1 });
       results = await Promise.all(
         results.map(async (album) => {
-          const tracks = await Track.find({ album: album._id }).sort({
-            number: 1,
-          });
+          const tracks = await Track.find({ album: album._id });
           return { ...album.toObject(), tracks };
         }),
       );
@@ -64,7 +62,7 @@ albumsRouter.get('/:id', async (req, res, next) => {
       return res.status(404).send({ error: 'Wrong artist' });
     }
     const result = await Albums.findById({ _id }).populate('author');
-    const tracks = await Track.find({ album: _id });
+    const tracks = await Track.find({ album: _id }).sort({ number: 1 });
     return res.send({ ...result?.toObject(), tracks });
   } catch (error) {
     return next(error);
