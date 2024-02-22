@@ -21,7 +21,7 @@ const run = async () => {
 
   const collections = ['artists', 'albums', 'tracks'];
 
-  for (const collectionName in collections) {
+  for (const collectionName of collections) {
     await dropCollection(db, collectionName);
   }
 
@@ -242,13 +242,13 @@ const run = async () => {
     },
     {
       title: 'ОМО',
-      number: 4,
+      number: 5,
       album: eya,
       duration: '3:30',
     },
     {
       title: 'Акула',
-      number: 5,
+      number: 4,
       album: eya,
       duration: '2:15',
     },
