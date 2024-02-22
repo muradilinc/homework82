@@ -1,9 +1,13 @@
-import mongoose from "mongoose";
-import Albums from "./Albums";
+import mongoose from 'mongoose';
+import Albums from './Albums';
 
 const tracksSchema = new mongoose.Schema({
   title: {
     type: String,
+    required: true,
+  },
+  number: {
+    type: Number,
     required: true,
   },
   album: {

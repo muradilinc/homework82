@@ -1,9 +1,9 @@
-import express from "express";
-import {Track} from "../types";
-import Tracks from "../models/Tracks";
-import mongoose, {Types} from "mongoose";
-import User from "../models/User";
-import TrackHistory from "../models/TrackHistory";
+import express from 'express';
+import { Track } from '../types';
+import Tracks from '../models/Tracks';
+import mongoose, { Types } from 'mongoose';
+import User from '../models/User';
+import TrackHistory from '../models/TrackHistory';
 
 const tracksRouter = express.Router();
 
@@ -11,6 +11,7 @@ tracksRouter.post('/', async (req, res, next) => {
   try {
     const trackData: Track = {
       title: req.body.title,
+      number: req.body.number,
       album: req.body.album,
       duration: req.body.duration,
     };
@@ -34,20 +35,20 @@ tracksRouter.get('/', async (req, res, next) => {
       try {
         _id = new Types.ObjectId(req.query.album as string);
       } catch {
-        return res.status(404).send({error: 'Wrong album'});
+        return res.status(404).send({ error: 'Wrong album' });
       }
-      results = await Tracks.find({album: _id});
+      results = await Tracks.find({ album: _id });
     } else if (req.query.artist) {
       try {
         _id = new Types.ObjectId(req.query.artist as string);
       } catch {
-        return res.status(404).send({error: 'Wrong artist'});
+        return res.status(404).send({ error: 'Wrong artist' });
       }
-      results =  await Tracks.find().populate({
+      results = await Tracks.find().populate({
         path: 'album',
         match: { author: _id },
       });
-      const filterTracks = results.filter(track => track.album !== null);
+      const filterTracks = results.filter((track) => track.album !== null);
       return res.send(filterTracks);
     } else {
       results = await Tracks.find();
@@ -62,13 +63,13 @@ tracksRouter.post('/track_history', async (req, res, next) => {
   try {
     const token = req.get('Authorization');
     if (!token) {
-      return res.status(401).send({error: 'No token present'});
+      return res.status(401).send({ error: 'No token present' });
     }
 
-    const user = await User.findOne({token});
+    const user = await User.findOne({ token });
 
     if (!user) {
-      return res.status(401).send({error: 'Unauthorized!'});
+      return res.status(401).send({ error: 'Unauthorized!' });
     }
 
     const tracks = new TrackHistory({
