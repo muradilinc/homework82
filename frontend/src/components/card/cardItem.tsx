@@ -1,7 +1,6 @@
 import React from 'react';
 import { Album, Artist } from '../../type';
 import { BASE_URL } from '../../constants/link';
-import dayjs from 'dayjs';
 import { useAppSelector } from '../../app/hooks';
 import { selectAllLoading } from '../../store/artists/artistsSlice';
 import CardSkeleton from '../Spinner/CardSkeleton';
@@ -35,11 +34,9 @@ const CardItem: React.FC<Props> = ({ item }) => {
               {'name' in item ? item.name : item.title}
             </h4>
             <p className="text-[#6a6a6a] text-sm">
-              {'name' in item
-                ? 'Performer'
-                : dayjs(item.release).format('YYYY')}
+              {'name' in item ? 'Performer' : item.release}
               {'tracks' in item ? (
-                <span className="ml-[5px]">Track: {item.tracks.length}</span>
+                <span className="ml-[5px]">Tracks: {item.tracks.length}</span>
               ) : null}
             </p>
           </div>
