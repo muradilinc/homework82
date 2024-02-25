@@ -2,8 +2,8 @@ import express from 'express';
 import { Track } from '../types';
 import Tracks from '../models/Tracks';
 import mongoose, { Types } from 'mongoose';
-import User from '../models/User';
 import TrackHistory from '../models/TrackHistory';
+import auth, { RequestWithUser } from '../middleware/auth';
 
 const tracksRouter = express.Router();
 
@@ -59,29 +59,38 @@ tracksRouter.get('/', async (req, res, next) => {
   }
 });
 
-tracksRouter.post('/track_history', async (req, res, next) => {
-  try {
-    const token = req.get('Authorization');
-    if (!token) {
-      return res.status(401).send({ error: 'No token present' });
+tracksRouter.post(
+  '/tracks_history',
+  auth,
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const tracks = new TrackHistory({
+        user: req.user?._id,
+        track: req.body.track,
+        datetime: new Date().toISOString(),
+      });
+
+      await tracks.save();
+      return res.send(tracks);
+    } catch (error) {
+      return next(error);
     }
+  },
+);
 
-    const user = await User.findOne({ token });
-
-    if (!user) {
-      return res.status(401).send({ error: 'Unauthorized!' });
+tracksRouter.get(
+  '/tracks_history',
+  auth,
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const results = await TrackHistory.find({ user: req.user?._id }).populate(
+        'track',
+      );
+      return res.send(results);
+    } catch (error) {
+      return next(error);
     }
-
-    const tracks = new TrackHistory({
-      user: user._id,
-      track: req.body.track,
-      datetime: new Date().toISOString(),
-    });
-
-    return res.send(tracks);
-  } catch (error) {
-    return next(error);
-  }
-});
+  },
+);
 
 export default tracksRouter;

@@ -7,10 +7,10 @@ import {
   selectGetSingleAlbumLoading,
 } from '../../store/albums/albumsSlice';
 import { getAlbum } from '../../store/albums/albumsThunk';
-import dayjs from 'dayjs';
 import { sumDuration } from '../../helpers/sumDuration';
 import { Clock } from '@phosphor-icons/react';
 import Spinner from '../../components/Spinner/Spinner';
+import { sendTrackToHistory } from '../../store/tracks/tracksHistoryThunk';
 
 const AlbumsPage = () => {
   const { id } = useParams() as { id: string };
@@ -45,7 +45,7 @@ const AlbumsPage = () => {
             />
             <p className="flex gap-x-3">
               {album.author.name}
-              <span>{dayjs(album.release).format('YYYY')}</span>
+              <span>{album.release}</span>
               <span>{album.tracks.length} tracks,</span>
               <span>{sumDuration(album.tracks)}</span>
             </p>
@@ -66,7 +66,10 @@ const AlbumsPage = () => {
               className="grid grid-cols-12 hover:bg-white items-center rounded-[5px] hover:bg-opacity-5 p-[20px]"
               key={track._id}
             >
-              <div className="col-span-11 flex gap-x-[15px] items-center">
+              <div
+                className="col-span-11 flex gap-x-[15px] items-center"
+                onClick={() => dispatch(sendTrackToHistory(track._id))}
+              >
                 <span>{index + 1}</span>
                 <div>
                   <p className="text-base">{track.title}</p>

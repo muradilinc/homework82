@@ -5,4 +5,7 @@ export const routes: Routes = {
   notPage: '*',
   artists: '/artists',
   albums: '/albums',
+  signUp: '/register',
+  signIn: '/login',
+  history: '/history',
 };
