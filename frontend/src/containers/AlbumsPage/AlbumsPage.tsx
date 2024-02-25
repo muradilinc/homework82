@@ -7,7 +7,6 @@ import {
   selectGetSingleAlbumLoading,
 } from '../../store/albums/albumsSlice';
 import { getAlbum } from '../../store/albums/albumsThunk';
-import dayjs from 'dayjs';
 import { sumDuration } from '../../helpers/sumDuration';
 import { Clock } from '@phosphor-icons/react';
 import Spinner from '../../components/Spinner/Spinner';
@@ -45,7 +44,7 @@ const AlbumsPage = () => {
             />
             <p className="flex gap-x-3">
               {album.author.name}
-              <span>{dayjs(album.release).format('YYYY')}</span>
+              <span>{album.release}</span>
               <span>{album.tracks.length} tracks,</span>
               <span>{sumDuration(album.tracks)}</span>
             </p>
