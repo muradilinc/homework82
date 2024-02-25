@@ -1,18 +1,54 @@
-import { Link } from 'react-router-dom';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../../store/users/usersThunk';
 import { routes } from '../../constants/routes';
+import { LoginMutation } from '../../type';
 
 const LoginPage = () => {
+  const [state, setState] = useState<LoginMutation>({
+    username: '',
+    password: '',
+  });
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const changeField = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const sendFormHandler = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      await dispatch(login(state)).unwrap();
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-[80vh]">
       <div className="bg-[#121212] p-[20px] box-border w-[45%] rounded-[8px]">
         <h2 className="text-center text-5xl font-bold mb-[30px]">Sign in</h2>
-        <form className="flex flex-col gap-y-3">
+        <form onSubmit={sendFormHandler} className="flex flex-col gap-y-3">
           <input
-            className="bg-gray-50 bg-inherit outline-0 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white"
+            className="bg-gray-50 bg-inherit outline-0 border border-gray-300 text-white text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white"
+            value={state.username}
+            onChange={changeField}
+            name="username"
             type="text"
           />
           <input
-            className="bg-gray-50 bg-inherit outline-0 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white"
+            className="bg-gray-50 bg-inherit outline-0 border border-gray-300 text-white text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white"
+            value={state.password}
+            onChange={changeField}
+            name="password"
             type="password"
           />
           <button
