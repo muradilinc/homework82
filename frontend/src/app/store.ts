@@ -1,7 +1,4 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { artistsReducer } from '../store/artists/artistsSlice';
-import { albumsReducer } from '../store/albums/albumsSlice';
-import { usersReducer } from '../store/users/usersSlice';
 import storage from 'redux-persist/lib/storage';
 import {
   persistReducer,
@@ -13,6 +10,10 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
+import { artistsReducer } from '../store/artists/artistsSlice';
+import { albumsReducer } from '../store/albums/albumsSlice';
+import { usersReducer } from '../store/users/usersSlice';
+import { tracksReducer } from '../store/tracks/tracksSlice';
 
 const usersPersistConfig = {
   key: 'store:users',
@@ -23,6 +24,7 @@ const usersPersistConfig = {
 const rootReducer = combineReducers({
   artists: artistsReducer,
   albums: albumsReducer,
+  tracks: tracksReducer,
   users: persistReducer(usersPersistConfig, usersReducer),
 });
 

@@ -11,6 +11,7 @@ export interface Routes {
   albums: string;
   signUp: string;
   signIn: string;
+  history: string;
 }
 
 export interface Album {
@@ -64,4 +65,9 @@ export interface LoginMutation {
 
 export interface GlobalError {
   error: string;
+}
+
+export interface TrackHistory {
+  author: Artist;
+  track: Track;
 }

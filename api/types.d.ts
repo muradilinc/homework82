@@ -32,11 +32,3 @@ export interface UserMethods {
 }
 
 export type UserModel = Model<UserFields, unknown, UserMethods>;
-
-export interface TrackHistory {
-  user: string;
-  track: string;
-  datetime: Date;
-}
-
-type TrackHistoryModel = Model<TrackHistory>;

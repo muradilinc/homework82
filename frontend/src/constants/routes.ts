@@ -7,4 +7,5 @@ export const routes: Routes = {
   albums: '/albums',
   signUp: '/register',
   signIn: '/login',
+  history: '/history',
 };

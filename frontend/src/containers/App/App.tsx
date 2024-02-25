@@ -7,6 +7,7 @@ import ArtistPage from '../ArtistPage/ArtistPage';
 import AlbumsPage from '../AlbumsPage/AlbumsPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import LoginPage from '../LoginPage/LoginPage';
+import HistoryPage from '../HistoryPage/HistoryPage';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path={routes.home} element={<HomePage />} />
           <Route path={routes.artists + '/:id'} element={<ArtistPage />} />
           <Route path={routes.albums + '/:id'} element={<AlbumsPage />} />
+          <Route path={routes.history} element={<HistoryPage />} />
           <Route path={routes.signUp} element={<RegisterPage />} />
           <Route path={routes.signIn} element={<LoginPage />} />
           <Route path={routes.notPage} element={<NotPage />} />

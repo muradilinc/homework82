@@ -1,9 +1,17 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { routes } from '../../constants/routes';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { logout, selectUser } from '../../store/users/usersSlice';
 
 const Header = () => {
+  const user = useAppSelector(selectUser);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
 
   return (
     <div className="container flex justify-between items-center fixed">
@@ -21,19 +29,38 @@ const Header = () => {
           <CaretRight size={20} />
         </button>
       </div>
-      <div className="flex gap-x-5 mr-5">
-        <button
-          className="text-[#a7a7a7] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[30px] py-[8px] px-[32px]"
-          onClick={() => navigate(routes.signUp)}
-        >
-          sign up
-        </button>
-        <button
-          className="text-black bg-white rounded-[30px] py-[8px] px-[32px] text-base font-bold capitalize"
-          onClick={() => navigate(routes.signIn)}
-        >
-          sign in
-        </button>
+      <div className="mr-5">
+        {user ? (
+          <div className="flex gap-x-5 items-center">
+            <Link
+              className="text-[#a7a7a7] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[30px] py-[8px] px-[32px]"
+              to={routes.history}
+            >
+              History
+            </Link>
+            <button
+              className="text-[#a7a7a7] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[30px] py-[8px] px-[32px]"
+              onClick={logoutHandler}
+            >
+              logout
+            </button>
+          </div>
+        ) : (
+          <div className="flex gap-x-5 items-center">
+            <button
+              className="text-[#a7a7a7] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[30px] py-[8px] px-[32px]"
+              onClick={() => navigate(routes.signUp)}
+            >
+              sign up
+            </button>
+            <button
+              className="text-black bg-white rounded-[30px] py-[8px] px-[32px] text-base font-bold capitalize"
+              onClick={() => navigate(routes.signIn)}
+            >
+              sign in
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
