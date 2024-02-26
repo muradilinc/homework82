@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getTracksHistory } from '../../store/tracks/tracksHistoryThunk';
 import { selectTracks } from '../../store/tracks/tracksSlice';
 import { useNavigate } from 'react-router-dom';
+import { routes } from '../../constants/routes';
 
 const HistoryPage = () => {
   const tracks = useAppSelector(selectTracks);
@@ -14,10 +15,15 @@ const HistoryPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (
-      !JSON.parse(localStorage.getItem('persist:store:users') as string).user
-    ) {
-      navigate('/');
+    const storedUser = localStorage.getItem('persist:store:users');
+
+    if (storedUser) {
+      const user = JSON.parse(storedUser).user;
+      if (!JSON.parse(user)) {
+        navigate(routes.home);
+      }
+    } else {
+      navigate(routes.home);
     }
   }, [navigate]);
 

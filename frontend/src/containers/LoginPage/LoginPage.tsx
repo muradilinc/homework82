@@ -1,9 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../store/users/usersThunk';
 import { routes } from '../../constants/routes';
 import { LoginMutation } from '../../type';
+import { selectLoginError } from '../../store/users/usersSlice';
 
 const LoginPage = () => {
   const [state, setState] = useState<LoginMutation>({
@@ -12,6 +13,7 @@ const LoginPage = () => {
   });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const error = useAppSelector(selectLoginError);
 
   const changeField = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -43,6 +45,7 @@ const LoginPage = () => {
             onChange={changeField}
             name="username"
             type="text"
+            required
           />
           <input
             className="bg-gray-50 bg-inherit outline-0 border border-gray-300 text-white text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white"
@@ -50,7 +53,9 @@ const LoginPage = () => {
             onChange={changeField}
             name="password"
             type="password"
+            required
           />
+          {error && <p className="text-sm text-red-500">{error.error}</p>}
           <button
             className="bg-[#1ed760] rounded-[30px] text-base font-bold py-[8px] text-black capitalize"
             type="submit"
