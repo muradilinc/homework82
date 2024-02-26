@@ -15,7 +15,10 @@ export const register = createAsyncThunk<
   { rejectValue: ValidationError }
 >('users/register', async (registerMutation, { rejectWithValue }) => {
   try {
-    const response = await axiosApi.post('/users', registerMutation);
+    const response = await axiosApi.post<RegisterResponse>(
+      '/users',
+      registerMutation,
+    );
     return response.data;
   } catch (error) {
     if (
@@ -37,7 +40,7 @@ export const login = createAsyncThunk<
 >('users/login', async (loginMutation, { rejectWithValue }) => {
   try {
     const response = await axiosApi.post<RegisterResponse>(
-      'users/sessions',
+      '/users/sessions',
       loginMutation,
     );
     return response.data;

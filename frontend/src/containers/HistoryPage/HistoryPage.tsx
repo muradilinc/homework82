@@ -14,9 +14,13 @@ const HistoryPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (
-      !JSON.parse(localStorage.getItem('persist:store:users') as string).user
-    ) {
+    const storedUserData = localStorage.getItem('persist:store:users');
+    if (storedUserData) {
+      const user = JSON.parse(storedUserData).user;
+      if (!JSON.parse(user)) {
+        navigate('/');
+      }
+    } else {
       navigate('/');
     }
   }, [navigate]);

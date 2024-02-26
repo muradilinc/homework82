@@ -28,7 +28,6 @@ const trackHistorySchema = new Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Artist',
-    required: true,
     validate: {
       validator: async (value: mongoose.Types.ObjectId) => {
         const artists = await Artists.findById(value);
