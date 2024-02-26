@@ -4,6 +4,7 @@ import { getTracksHistory } from '../../store/tracks/tracksHistoryThunk';
 import { selectTracks } from '../../store/tracks/tracksSlice';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../constants/routes';
+import dayjs from 'dayjs';
 
 const HistoryPage = () => {
   const tracks = useAppSelector(selectTracks);
@@ -32,8 +33,9 @@ const HistoryPage = () => {
       <h4 className="text-3xl font-bold">History Tracks</h4>
       <div className="flex flex-col gap-y-3 my-[20px]">
         {tracks.map((track) => (
-          <div>
+          <div key={track._id}>
             <p>{track.track.title}</p>
+            <p>listened: {dayjs(track.datetime).format('DD.MM.YYYY HH:MM')}</p>
           </div>
         ))}
       </div>

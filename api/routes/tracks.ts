@@ -83,9 +83,9 @@ tracksRouter.get(
   auth,
   async (req: RequestWithUser, res, next) => {
     try {
-      const results = await TrackHistory.find({ user: req.user?._id }).populate(
-        'track',
-      );
+      const results = await TrackHistory.find({ user: req.user?._id })
+        .populate('track')
+        .sort({ datetime: -1 });
       return res.send(results);
     } catch (error) {
       return next(error);

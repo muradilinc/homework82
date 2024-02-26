@@ -68,6 +68,8 @@ export interface GlobalError {
 }
 
 export interface TrackHistory {
+  _id: string;
   author: Artist;
   track: Track;
+  datetime: string;
 }
