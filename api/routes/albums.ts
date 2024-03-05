@@ -1,10 +1,9 @@
 import express from 'express';
-import { Album } from '../types';
 import { imagesUpload } from '../helpers/multer';
 import Albums from '../models/Albums';
 import mongoose, { Types } from 'mongoose';
 import Track from '../models/Tracks';
-import auth from '../middleware/auth';
+import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
 
 const albumsRouter = express.Router();
@@ -14,16 +13,15 @@ albumsRouter.post(
   auth,
   permit('user'),
   imagesUpload.single('image'),
-  async (req, res, next) => {
+  async (req: RequestWithUser, res, next) => {
     try {
-      const albumData: Album = {
+      const album = new Albums({
         title: req.body.title,
         author: req.body.author,
         release: req.body.release,
         image: req.file ? req.file.filename : null,
-      };
-
-      const album = new Albums(albumData);
+        user: req.user?._id,
+      });
       await album.save();
       res.send(album);
     } catch (error) {
@@ -85,5 +83,25 @@ albumsRouter.get('/:id', async (req, res, next) => {
     return next(error);
   }
 });
+
+albumsRouter.delete(
+  '/:id',
+  auth,
+  permit('admin', 'user'),
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const results = await Albums.findOneAndDelete({
+        _id: req.params.id,
+        user: req.user?._id,
+      });
+      if (!results) {
+        return res.status(403).json({ error: 'Доступ запрещен', status: 403 });
+      }
+      return res.send({ message: 'Deleted!', id: results._id });
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
 
 export default albumsRouter;

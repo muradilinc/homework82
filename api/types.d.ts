@@ -4,6 +4,7 @@ export interface Artist {
   name: string;
   picture: string | null;
   description: string;
+  user: string;
 }
 
 export interface Album {
@@ -11,6 +12,7 @@ export interface Album {
   author: string;
   release: number;
   image: string | null;
+  user: string;
 }
 
 export interface Track {
@@ -18,6 +20,7 @@ export interface Track {
   number: number;
   album: string;
   duration: string | null;
+  user: string;
 }
 
 export interface UserFields {

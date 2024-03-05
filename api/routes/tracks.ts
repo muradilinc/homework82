@@ -1,5 +1,4 @@
 import express from 'express';
-import { Track } from '../types';
 import Tracks from '../models/Tracks';
 import mongoose, { Types } from 'mongoose';
 import TrackHistory from '../models/TrackHistory';
@@ -8,25 +7,29 @@ import permit from '../middleware/permit';
 
 const tracksRouter = express.Router();
 
-tracksRouter.post('/', auth, permit('user'), async (req, res, next) => {
-  try {
-    const trackData: Track = {
-      title: req.body.title,
-      number: req.body.number,
-      album: req.body.album,
-      duration: req.body.duration,
-    };
-
-    const track = new Tracks(trackData);
-    await track.save();
-    res.send(track);
-  } catch (error) {
-    if (error instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(error.message);
+tracksRouter.post(
+  '/',
+  auth,
+  permit('user'),
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const track = new Tracks({
+        title: req.body.title,
+        number: req.body.number,
+        album: req.body.album,
+        duration: req.body.duration,
+        user: req.user?._id,
+      });
+      await track.save();
+      res.send(track);
+    } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError) {
+        return res.status(422).send(error.message);
+      }
+      return next(error);
     }
-    return next(error);
-  }
-});
+  },
+);
 
 tracksRouter.get('/', async (req, res, next) => {
   try {
@@ -88,6 +91,26 @@ tracksRouter.get(
         .populate('track')
         .sort({ datetime: -1 });
       return res.send(results);
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
+
+tracksRouter.delete(
+  '/:id',
+  auth,
+  permit('admin', 'user'),
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const results = await Tracks.findOneAndDelete({
+        _id: req.params._id,
+        user: req.user?._id,
+      });
+      if (!results) {
+        return res.status(403).json({ error: 'Доступ запрещен', status: 403 });
+      }
+      return res.send({ message: 'Deleted!', id: results._id });
     } catch (error) {
       return next(error);
     }
