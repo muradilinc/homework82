@@ -8,6 +8,7 @@ import AlbumsPage from '../AlbumsPage/AlbumsPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import LoginPage from '../LoginPage/LoginPage';
 import HistoryPage from '../HistoryPage/HistoryPage';
+import NewPage from '../NewPage/NewPage';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path={routes.history} element={<HistoryPage />} />
           <Route path={routes.signUp} element={<RegisterPage />} />
           <Route path={routes.signIn} element={<LoginPage />} />
+          <Route path={routes.submit} element={<NewPage />} />
           <Route path={routes.notPage} element={<NotPage />} />
         </Routes>
       </Layout>

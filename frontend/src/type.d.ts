@@ -63,3 +63,9 @@ export interface TrackHistory {
   track: Track;
   datetime: string;
 }
+
+export interface ArtistMutation {
+  name: string;
+  pictures: File | null;
+  description: string;
+}
