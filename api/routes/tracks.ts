@@ -4,10 +4,11 @@ import Tracks from '../models/Tracks';
 import mongoose, { Types } from 'mongoose';
 import TrackHistory from '../models/TrackHistory';
 import auth, { RequestWithUser } from '../middleware/auth';
+import permit from '../middleware/permit';
 
 const tracksRouter = express.Router();
 
-tracksRouter.post('/', async (req, res, next) => {
+tracksRouter.post('/', auth, permit('user'), async (req, res, next) => {
   try {
     const trackData: Track = {
       title: req.body.title,

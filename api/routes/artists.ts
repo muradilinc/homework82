@@ -3,11 +3,15 @@ import { imagesUpload } from '../helpers/multer';
 import { Artist } from '../types';
 import Artists from '../models/Artists';
 import mongoose from 'mongoose';
+import auth from '../middleware/auth';
+import permit from '../middleware/permit';
 
 const artistsRouter = express.Router();
 
 artistsRouter.post(
   '/',
+  auth,
+  permit('user'),
   imagesUpload.single('picture'),
   async (req, res, next) => {
     try {

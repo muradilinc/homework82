@@ -4,28 +4,36 @@ import { imagesUpload } from '../helpers/multer';
 import Albums from '../models/Albums';
 import mongoose, { Types } from 'mongoose';
 import Track from '../models/Tracks';
+import auth from '../middleware/auth';
+import permit from '../middleware/permit';
 
 const albumsRouter = express.Router();
 
-albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
-  try {
-    const albumData: Album = {
-      title: req.body.title,
-      author: req.body.author,
-      release: req.body.release,
-      image: req.file ? req.file.filename : null,
-    };
+albumsRouter.post(
+  '/',
+  auth,
+  permit('user'),
+  imagesUpload.single('image'),
+  async (req, res, next) => {
+    try {
+      const albumData: Album = {
+        title: req.body.title,
+        author: req.body.author,
+        release: req.body.release,
+        image: req.file ? req.file.filename : null,
+      };
 
-    const album = new Albums(albumData);
-    await album.save();
-    res.send(album);
-  } catch (error) {
-    if (error instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(error.message);
+      const album = new Albums(albumData);
+      await album.save();
+      res.send(album);
+    } catch (error) {
+      if (error instanceof mongoose.Error.ValidationError) {
+        return res.status(422).send(error.message);
+      }
+      return next(error);
     }
-    return next(error);
-  }
-});
+  },
+);
 
 albumsRouter.get('/', async (req, res, next) => {
   try {
