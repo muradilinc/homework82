@@ -63,6 +63,40 @@ tracksRouter.get('/', async (req, res, next) => {
   }
 });
 
+tracksRouter.patch('/:id', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const result = await Tracks.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      { isPublished: true },
+    );
+    return res.send({ message: 'Updated!', result });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+tracksRouter.delete(
+  '/:id',
+  auth,
+  permit('admin', 'user'),
+  async (req: RequestWithUser, res, next) => {
+    try {
+      const result = await Tracks.findOneAndDelete({
+        _id: req.params._id,
+        user: req.user?._id,
+      });
+      if (!result) {
+        return res.status(403).json({ error: 'Доступ запрещен', status: 403 });
+      }
+      return res.send({ message: 'Deleted!', id: result._id });
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
+
 tracksRouter.post(
   '/tracks_history',
   auth,
@@ -91,26 +125,6 @@ tracksRouter.get(
         .populate('track')
         .sort({ datetime: -1 });
       return res.send(results);
-    } catch (error) {
-      return next(error);
-    }
-  },
-);
-
-tracksRouter.delete(
-  '/:id',
-  auth,
-  permit('admin', 'user'),
-  async (req: RequestWithUser, res, next) => {
-    try {
-      const results = await Tracks.findOneAndDelete({
-        _id: req.params._id,
-        user: req.user?._id,
-      });
-      if (!results) {
-        return res.status(403).json({ error: 'Доступ запрещен', status: 403 });
-      }
-      return res.send({ message: 'Deleted!', id: results._id });
     } catch (error) {
       return next(error);
     }

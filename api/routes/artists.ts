@@ -49,20 +49,36 @@ artistsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
+artistsRouter.patch('/:id', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const result = await Artists.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        isPublished: true,
+      },
+    );
+    return res.send({ message: 'Updated!', result });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 artistsRouter.delete(
   '/:id',
   auth,
   permit('admin', 'user'),
   async (req: RequestWithUser, res, next) => {
     try {
-      const results = await Artists.findOneAndDelete({
+      const result = await Artists.findOneAndDelete({
         _id: req.params.id,
         user: req.user?._id,
       });
-      if (!results) {
+      if (!result) {
         return res.status(403).json({ error: 'Доступ запрещен', status: 403 });
       }
-      return res.send({ message: 'Deleted!', id: results._id });
+      return res.send({ message: 'Deleted!', id: result._id });
     } catch (error) {
       return next(error);
     }

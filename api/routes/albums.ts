@@ -84,6 +84,22 @@ albumsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
+albumsRouter.patch('/:id', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const result = await Albums.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        isPublished: true,
+      },
+    );
+    return res.send(result);
+  } catch (error) {
+    return next(error);
+  }
+});
+
 albumsRouter.delete(
   '/:id',
   auth,
