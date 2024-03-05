@@ -8,6 +8,8 @@ import {
   RegisterResponse,
   ValidationError,
 } from '../../type';
+import { RootState } from '../../app/store';
+import { logoutState } from './usersSlice';
 
 export const register = createAsyncThunk<
   RegisterResponse,
@@ -56,3 +58,16 @@ export const login = createAsyncThunk<
     throw error;
   }
 });
+
+export const logout = createAsyncThunk<void, undefined, { state: RootState }>(
+  'users/logout',
+  async (_, { getState, dispatch }) => {
+    const token = getState().users.user?.token;
+    await axiosApi.delete('/users/sessions', {
+      headers: {
+        'Authorization': 'Bearer ' + token,
+      },
+    });
+    dispatch(logoutState());
+  },
+);

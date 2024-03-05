@@ -166,7 +166,7 @@ const run = async () => {
       title: 'Я дома',
       author: limba,
       release: 2019,
-      image: 'fixtures/albums/iathome',
+      image: 'fixtures/albums/iathome.jpg',
       user: user,
       isPublished: false,
     },

@@ -2,15 +2,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { routes } from '../../constants/routes';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { logout, selectUser } from '../../store/users/usersSlice';
+import { selectUser } from '../../store/users/usersSlice';
+import { logout } from '../../store/users/usersThunk';
 
 const Header = () => {
   const user = useAppSelector(selectUser);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const logoutHandler = () => {
-    dispatch(logout());
+  const logoutHandler = async () => {
+    await dispatch(logout()).unwrap();
     navigate(routes.home);
   };
 
@@ -33,6 +34,12 @@ const Header = () => {
       <div className="mr-5">
         {user ? (
           <div className="flex gap-x-5 items-center">
+            <Link
+              className="text-[#a7a7a7] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[50%] py-[8px] px-[16px]"
+              to={routes.submit}
+            >
+              +
+            </Link>
             <Link
               className="text-[#a7a7a7] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[30px] py-[8px] px-[32px]"
               to={routes.history}

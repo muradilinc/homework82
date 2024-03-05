@@ -4,16 +4,6 @@ export interface Artist {
   name: string;
 }
 
-export interface Routes {
-  home: string;
-  notPage: string;
-  artists: string;
-  albums: string;
-  signUp: string;
-  signIn: string;
-  history: string;
-}
-
 export interface Album {
   _id: string;
   release: number;
