@@ -7,7 +7,7 @@ const permit = (...roles: string[]) => {
       return res.status(401).send({ error: 'No authenticated!' });
     }
 
-    if (roles.includes(req.user.role)) {
+    if (!roles.includes(req.user.role)) {
       return res.status(403).send({ error: 'No authorized!' });
     }
 

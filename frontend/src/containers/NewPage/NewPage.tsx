@@ -63,7 +63,9 @@ const NewPage = () => {
           />
           <div>
             <input type="text" value={filename} onClick={activateInput} />
-            <button onClick={activateInput}>browse</button>
+            <button type="button" onClick={activateInput}>
+              browse
+            </button>
           </div>
         </div>
         <div>
