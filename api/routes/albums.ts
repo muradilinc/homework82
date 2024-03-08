@@ -18,7 +18,7 @@ albumsRouter.post(
       const album = new Albums({
         title: req.body.title,
         author: req.body.author,
-        release: req.body.release,
+        release: parseInt(req.body.release),
         image: req.file ? req.file.filename : null,
         user: req.user?._id,
       });

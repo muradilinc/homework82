@@ -14,7 +14,7 @@ export interface Artist {
   picture: string;
   name: string;
   isPublished: boolean;
-  user: User;
+  user: string;
 }
 
 export interface Album {
@@ -86,4 +86,18 @@ export interface ArtistMutation {
   name: string;
   picture: File | null;
   description: string;
+}
+
+export interface AlbumMutation {
+  title: string;
+  image: File | null;
+  release: string;
+  author: string;
+}
+
+export interface TrackMutation {
+  title: string;
+  number: string;
+  duration: string;
+  album: string;
 }

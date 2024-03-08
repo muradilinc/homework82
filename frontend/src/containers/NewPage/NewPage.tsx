@@ -1,122 +1,62 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import { ArtistMutation } from '../../type';
-import { useAppDispatch } from '../../app/hooks';
-import { createArtist } from '../../store/artists/artistsThunk';
+import { useEffect, useState } from 'react';
+import ArtistForm from '../../components/Forms/ArtistForm';
+import AlbumForm from '../../components/Forms/AlbumForm';
+import TrackForm from '../../components/Forms/TrackForm';
 
 const NewPage = () => {
-  const [artist, setArtist] = useState<ArtistMutation>({
-    name: '',
-    picture: null,
-    description: '',
-  });
-  const [imageData, setImageData] = useState('');
-  const imageRef = useRef<HTMLInputElement>(null);
-  const dispatch = useAppDispatch();
+  const [activeTab, setActiveTab] = useState(1);
 
-  const changeArtistFields = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = event.target;
-    setArtist((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    setActiveTab(JSON.parse(localStorage.getItem('tab') || '{}'));
+  }, []);
 
-  const activateInput = () => {
-    if (imageRef.current) {
-      imageRef.current.click();
-    }
-  };
-
-  const fileInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    if (files) {
-      setImageData(URL.createObjectURL(files[0]));
-      setArtist((prevState) => ({
-        ...prevState,
-        [name]: files[0],
-      }));
-    }
-  };
-
-  const clearImageField = () => {
-    setImageData('');
-  };
-
-  const handleCreate = async (event: FormEvent) => {
-    event.preventDefault();
-    await dispatch(createArtist(artist));
+  const selectTab = (tab: number) => {
+    localStorage.setItem('tab', JSON.stringify(tab));
+    setActiveTab(tab);
   };
 
   return (
     <div className="flex justify-center items-center h-[100vh]">
-      <form onSubmit={handleCreate} className="w-[70%] flex flex-col gap-y-3">
-        <div className="w-full items-center grid grid-cols-2">
-          <p className="capitalize">name:</p>
-          <input
-            type="text"
-            name="name"
-            className="bg-gray-50 border outline-0 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            value={artist.name}
-            onChange={changeArtistFields}
-            required
-          />
-        </div>
-        <div className="grid grid-cols-2">
-          <p className="capitalize">picture:</p>
-          <input
-            className="hidden"
-            type="file"
-            name="picture"
-            onChange={fileInputChangeHandler}
-            ref={imageRef}
-            required
-          />
-          {imageData ? (
-            <div className="relative">
-              <img
-                className="max-h-[250px] w-full object-contain"
-                src={imageData}
-                alt="preview"
-              />
+      <div className="grid grid-cols-1 bg-[#121212] w-[60%] p-[20px] rounded-[5px]">
+        <div className="mb-4 ">
+          <ul className="flex flex-wrap -mb-px text-sm font-medium text-center">
+            <li className="me-2" role="presentation">
               <button
-                onClick={clearImageField}
-                className="bg-[#1ed760] text-center items-center absolute top-[5px] right-[10px] py-[2px] px-[8px] rounded-[50%]"
+                className="inline-block p-4 border-b-2 rounded-t-lg"
+                type="button"
+                onClick={() => selectTab(1)}
               >
-                x
+                Artist
               </button>
-            </div>
-          ) : (
-            <button
-              className="border border-dashed p-1 capitalize"
-              type="button"
-              onClick={activateInput}
-            >
-              browse
-            </button>
-          )}
+            </li>
+            <li className="me-2" role="presentation">
+              <button
+                className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                type="button"
+                onClick={() => selectTab(2)}
+              >
+                Album
+              </button>
+            </li>
+            <li className="me-2" role="presentation">
+              <button
+                className="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                type="button"
+                onClick={() => selectTab(3)}
+              >
+                Track
+              </button>
+            </li>
+          </ul>
         </div>
-        <div className="grid grid-cols-2">
-          <p className="capitalize">description</p>
-          <textarea
-            name="description"
-            className="outline-0 block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            cols={30}
-            rows={10}
-            value={artist.description}
-            onChange={changeArtistFields}
-          />
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="bg-[#1ed760] px-2 py-1 rounded-[5px] capitalize"
-          >
-            create
-          </button>
-        </div>
-      </form>
+        {activeTab === 1 ? (
+          <ArtistForm />
+        ) : activeTab === 2 ? (
+          <AlbumForm />
+        ) : (
+          <TrackForm />
+        )}
+      </div>
     </div>
   );
 };

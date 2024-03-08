@@ -50,7 +50,7 @@ const ArtistPage = () => {
       <div className="bg-gradient-to-b from-gray-700 p-[20px]">
         <div className="flex justify-between items-center">
           <h4 className="font-bold text-2xl">Albums</h4>
-          {!artist.isPublished && artist.user._id === user?._id ? (
+          {!artist.isPublished && artist.user === user?._id ? (
             <button
               onClick={handleDelete}
               className="bg-red-400 px-[15px] py-[5px] rounded-[5px] capitalize"

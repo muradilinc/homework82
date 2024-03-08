@@ -15,7 +15,7 @@ tracksRouter.post(
     try {
       const track = new Tracks({
         title: req.body.title,
-        number: req.body.number,
+        number: parseInt(req.body.number),
         album: req.body.album,
         duration: req.body.duration,
         user: req.user?._id,

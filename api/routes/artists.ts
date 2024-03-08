@@ -36,7 +36,12 @@ artistsRouter.get('/', ignoreAuth, async (req: RequestWithUser, res, next) => {
   try {
     let result;
     if (req.user?._id) {
-      result = await Artists.find().populate('user');
+      result = await Artists.find({
+        $or: [
+          { isPublished: true },
+          { user: req.user._id, isPublished: false },
+        ],
+      }).populate('user');
     } else {
       result = await Artists.find({ isPublished: true });
     }

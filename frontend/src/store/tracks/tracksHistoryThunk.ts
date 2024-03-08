@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosApi from '../../http/axiosApi';
-import { TrackHistory } from '../../type';
+import { TrackHistory, TrackMutation } from '../../type';
 
 export const sendTrackToHistory = createAsyncThunk<void, string>(
   'tracks/postHistoryTrack',
@@ -18,5 +18,12 @@ export const getTracksHistory = createAsyncThunk<TrackHistory[]>(
       '/tracks/tracks_history',
     );
     return response.data;
+  },
+);
+
+export const createTrack = createAsyncThunk<void, TrackMutation>(
+  'tracks/create',
+  async (track) => {
+    await axiosApi.post('/tracks', track);
   },
 );
