@@ -1,22 +1,29 @@
-import { GlobalError, User, ValidationError } from '../../type';
+import { AdminContent, GlobalError, User, ValidationError } from '../../type';
 import { createSlice } from '@reduxjs/toolkit';
 import { login, register } from './usersThunk';
 import { RootState } from '../../app/store';
+import { getContents } from './adminThunk';
 
 interface UsersState {
   user: User | null;
+  content: AdminContent | null;
   registerLoading: boolean;
   registerError: ValidationError | null;
   loginLoading: boolean;
   loginError: GlobalError | null;
+  adminContentLoading: boolean;
+  adminContentError: GlobalError | null;
 }
 
 const initialState: UsersState = {
   user: null,
+  content: null,
   registerLoading: false,
   registerError: null,
   loginLoading: false,
   loginError: null,
+  adminContentLoading: false,
+  adminContentError: null,
 };
 
 export const usersSlice = createSlice({
@@ -52,6 +59,17 @@ export const usersSlice = createSlice({
       state.loginLoading = true;
       state.loginError = error || null;
     });
+    builder.addCase(getContents.pending, (state) => {
+      state.adminContentLoading = true;
+    });
+    builder.addCase(getContents.fulfilled, (state, { payload: data }) => {
+      state.adminContentLoading = false;
+      state.content = data;
+    });
+    builder.addCase(getContents.rejected, (state, { payload: error }) => {
+      state.adminContentLoading = true;
+      state.adminContentError = error || null;
+    });
   },
 });
 
@@ -68,3 +86,7 @@ export const selectRegisterError = (state: RootState) =>
 export const selectLoginLoading = (state: RootState) =>
   state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
+
+export const selectContent = (state: RootState) => state.users.content;
+export const selectContentLoading = (state: RootState) =>
+  state.users.adminContentLoading;

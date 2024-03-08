@@ -7,6 +7,7 @@ export interface Routes {
   signIn: string;
   history: string;
   submit: string;
+  admin: string;
 }
 
 export interface Artist {
@@ -100,4 +101,10 @@ export interface TrackMutation {
   number: string;
   duration: string;
   album: string;
+}
+
+export interface AdminContent {
+  artists: Artist[];
+  albums: Album[];
+  tracks: Track[];
 }

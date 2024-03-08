@@ -12,6 +12,7 @@ import NewPage from '../NewPage/NewPage';
 import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
 import { selectUser } from '../../store/users/usersSlice';
 import { useAppSelector } from '../../app/hooks';
+import AdminPage from '../AdminPage/AdminPage';
 
 const App = () => {
   const user = useAppSelector(selectUser);
@@ -31,6 +32,14 @@ const App = () => {
             element={
               <ProtectedRoute isAllowed={!!user}>
                 <NewPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={routes.admin}
+            element={
+              <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                <AdminPage />
               </ProtectedRoute>
             }
           />

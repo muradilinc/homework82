@@ -1,4 +1,6 @@
-export const routes = {
+import { Routes } from '../type';
+
+export const routes: Routes = {
   home: '/',
   notPage: '*',
   artists: '/artists',
@@ -7,4 +9,5 @@ export const routes = {
   signIn: '/login',
   history: '/history',
   submit: '/submit',
+  admin: '/admin',
 };

@@ -100,9 +100,7 @@ albumsRouter.patch('/:id', auth, permit('admin'), async (req, res, next) => {
       {
         _id: req.params.id,
       },
-      {
-        isPublished: true,
-      },
+      [{ $set: { isPublished: { $eq: [false, '$isPublished'] } } }],
     );
     return res.send(result);
   } catch (error) {
@@ -116,10 +114,16 @@ albumsRouter.delete(
   permit('admin', 'user'),
   async (req: RequestWithUser, res, next) => {
     try {
-      const results = await Albums.findOneAndDelete({
-        _id: req.params.id,
-        user: req.user?._id,
-      });
+      const query =
+        req.user?.role === 'user'
+          ? {
+              _id: req.params.id,
+              user: req.user?._id,
+            }
+          : {
+              _id: req.params.id,
+            };
+      const results = await Albums.findOneAndDelete(query);
       if (!results) {
         return res.status(403).json({ error: 'Доступ запрещен', status: 403 });
       }

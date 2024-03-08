@@ -5,6 +5,7 @@ export interface Artist {
   picture: string | null;
   description: string;
   user: string;
+  isPublished: boolean;
 }
 
 export interface Album {
@@ -13,6 +14,7 @@ export interface Album {
   release: number;
   image: string | null;
   user: string;
+  isPublished: boolean;
 }
 
 export interface Track {
@@ -21,6 +23,7 @@ export interface Track {
   album: string;
   duration: string | null;
   user: string;
+  isPublished: boolean;
 }
 
 export interface UserFields {
