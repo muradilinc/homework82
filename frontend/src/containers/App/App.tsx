@@ -9,12 +9,12 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import LoginPage from '../LoginPage/LoginPage';
 import HistoryPage from '../HistoryPage/HistoryPage';
 import NewPage from '../NewPage/NewPage';
-// import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
-// import { useAppSelector } from '../../app/hooks';
-// import { selectUser } from '../../store/users/usersSlice';
+import ProtectedRoute from '../../components/ProtectedRoute/ProtectedRoute';
+import { selectUser } from '../../store/users/usersSlice';
+import { useAppSelector } from '../../app/hooks';
 
 const App = () => {
-  // const user = useAppSelector(selectUser);
+  const user = useAppSelector(selectUser);
 
   return (
     <>
@@ -26,15 +26,14 @@ const App = () => {
           <Route path={routes.history} element={<HistoryPage />} />
           <Route path={routes.signUp} element={<RegisterPage />} />
           <Route path={routes.signIn} element={<LoginPage />} />
-          {/*<Route*/}
-          {/*  path={routes.submit}*/}
-          {/*  element={*/}
-          {/*    <ProtectedRoute isAllowed={user && user.role === 'admin'}>*/}
-          {/*      <NewPage />*/}
-          {/*    </ProtectedRoute>*/}
-          {/*  }*/}
-          {/*/>*/}
-          <Route path={routes.submit} element={<NewPage />} />
+          <Route
+            path={routes.submit}
+            element={
+              <ProtectedRoute isAllowed={!!user}>
+                <NewPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path={routes.notPage} element={<NotPage />} />
         </Routes>
       </Layout>

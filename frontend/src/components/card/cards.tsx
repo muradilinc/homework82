@@ -13,9 +13,13 @@ const Cards: React.FC<Props> = ({ data, route }) => {
   return (
     <div className="grid grid-cols-7 gap-[24px] min-w-[372px] my-[10px]">
       {data.map((item) => (
-        <Link to={routes[route] + '/' + item._id} key={item._id}>
-          <CardItem item={item} />
-        </Link>
+        <>
+          {!item.isPublished ? (
+            <Link to={routes[route] + '/' + item._id} key={item._id}>
+              <CardItem item={item} />
+            </Link>
+          ) : null}
+        </>
       ))}
     </div>
   );

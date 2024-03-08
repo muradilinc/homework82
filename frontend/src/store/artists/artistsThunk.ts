@@ -1,6 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosApi from '../../http/axiosApi';
-import { Artist } from '../../type';
+import { Artist, ArtistMutation } from '../../type';
+
+export const createArtist = createAsyncThunk<void, ArtistMutation>(
+  'artists/create',
+  async (artist) => {
+    const formData = new FormData();
+    formData.append('name', artist.name);
+    if (artist.picture) {
+      formData.append('picture', artist.picture);
+    }
+    formData.append('description', artist.description);
+    await axiosApi.post('/artists', formData);
+  },
+);
 
 export const getAllArtists = createAsyncThunk<Artist[]>(
   'artists/getAll',
@@ -20,5 +33,12 @@ export const getArtist = createAsyncThunk<Artist, string>(
     }
 
     return response.data;
+  },
+);
+
+export const deleteArtist = createAsyncThunk<void, string>(
+  'artists/delete',
+  async (id) => {
+    await axiosApi.delete(`/artists/${id}`);
   },
 );

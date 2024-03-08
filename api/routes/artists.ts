@@ -4,6 +4,7 @@ import Artists from '../models/Artists';
 import mongoose from 'mongoose';
 import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
+import ignoreAuth from '../middleware/ignoreAuth';
 
 const artistsRouter = express.Router();
 
@@ -31,10 +32,15 @@ artistsRouter.post(
   },
 );
 
-artistsRouter.get('/', async (_req, res, next) => {
+artistsRouter.get('/', ignoreAuth, async (req: RequestWithUser, res, next) => {
   try {
-    const results = await Artists.find();
-    return res.send(results);
+    let result;
+    if (req.user?._id) {
+      result = await Artists.find().populate('user');
+    } else {
+      result = await Artists.find({ isPublished: true });
+    }
+    return res.send(result);
   } catch (error) {
     return next(error);
   }

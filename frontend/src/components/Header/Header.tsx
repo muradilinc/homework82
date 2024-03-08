@@ -4,6 +4,7 @@ import { routes } from '../../constants/routes';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectUser } from '../../store/users/usersSlice';
 import { logout } from '../../store/users/usersThunk';
+import { getAllArtists } from '../../store/artists/artistsThunk';
 
 const Header = () => {
   const user = useAppSelector(selectUser);
@@ -12,6 +13,7 @@ const Header = () => {
 
   const logoutHandler = async () => {
     await dispatch(logout()).unwrap();
+    await dispatch(getAllArtists());
     navigate(routes.home);
   };
 

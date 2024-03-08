@@ -1,7 +1,20 @@
+export interface Routes {
+  home: string;
+  notPage: string;
+  artists: string;
+  albums: string;
+  signUp: string;
+  signIn: string;
+  history: string;
+  submit: string;
+}
+
 export interface Artist {
   _id: string;
   picture: string;
   name: string;
+  isPublished: boolean;
+  user: User;
 }
 
 export interface Album {
@@ -11,6 +24,8 @@ export interface Album {
   image: string | null;
   author: Artist;
   tracks: Track[];
+  isPublished: boolean;
+  user: User;
 }
 
 export interface Track {
@@ -18,6 +33,8 @@ export interface Track {
   title: string;
   album: string;
   duration: string;
+  isPublished: boolean;
+  user: User;
 }
 
 export interface User {
@@ -67,6 +84,6 @@ export interface TrackHistory {
 
 export interface ArtistMutation {
   name: string;
-  pictures: File | null;
+  picture: File | null;
   description: string;
 }

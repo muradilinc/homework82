@@ -5,6 +5,7 @@ import { useAppSelector } from '../../app/hooks';
 import { selectAllLoading } from '../../store/artists/artistsSlice';
 import CardSkeleton from '../Spinner/CardSkeleton';
 import { selectGetAlbumLoading } from '../../store/albums/albumsSlice';
+import { selectUser } from '../../store/users/usersSlice';
 
 interface Props {
   item: Artist | Album;
@@ -13,13 +14,21 @@ interface Props {
 const CardItem: React.FC<Props> = ({ item }) => {
   const loadingArtist = useAppSelector(selectAllLoading);
   const loadingAlbum = useAppSelector(selectGetAlbumLoading);
+  const user = useAppSelector(selectUser);
 
   return (
     <div className="flex flex-col gap-y-[16px] p-[16px] bg-[#181818] min-h-[261px] rounded-[8px] hover:bg-[#282828]">
       {loadingAlbum || loadingArtist ? (
         <CardSkeleton />
       ) : (
-        <>
+        <div className="relative">
+          {!item.isPublished && item.user._id === user?._id ? (
+            <div className="absolute right-[-10px] top-[-5px]">
+              <p className="bg-red-400 text-center px-[5px] rounded-[5px]">
+                unpublished
+              </p>
+            </div>
+          ) : null}
           <img
             className={
               'picture' in item
@@ -40,7 +49,7 @@ const CardItem: React.FC<Props> = ({ item }) => {
               ) : null}
             </p>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
