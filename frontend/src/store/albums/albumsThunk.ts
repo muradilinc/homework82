@@ -31,3 +31,10 @@ export const getAlbum = createAsyncThunk<Album, string>(
     return response.data;
   },
 );
+
+export const deleteAlbum = createAsyncThunk<void, string>(
+  'albums/delete',
+  async (id) => {
+    await axiosApi.delete(`/albums/${id}`);
+  },
+);

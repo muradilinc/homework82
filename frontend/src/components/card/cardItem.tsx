@@ -22,7 +22,7 @@ const CardItem: React.FC<Props> = ({ item }) => {
         <CardSkeleton />
       ) : (
         <div className="relative">
-          {!item.isPublished && item.user._id === user?._id ? (
+          {!item.isPublished && item.user === user?._id ? (
             <div className="absolute right-[-10px] top-[-5px]">
               <p className="bg-red-400 text-center px-[5px] rounded-[5px]">
                 unpublished

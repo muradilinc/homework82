@@ -84,7 +84,7 @@ tracksRouter.delete(
   async (req: RequestWithUser, res, next) => {
     try {
       const result = await Tracks.findOneAndDelete({
-        _id: req.params._id,
+        _id: req.params.id,
         user: req.user?._id,
       });
       if (!result) {

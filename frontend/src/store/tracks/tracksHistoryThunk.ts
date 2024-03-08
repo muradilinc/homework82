@@ -27,3 +27,10 @@ export const createTrack = createAsyncThunk<void, TrackMutation>(
     await axiosApi.post('/tracks', track);
   },
 );
+
+export const deleteTrack = createAsyncThunk<void, string>(
+  'tracks/delete',
+  async (id) => {
+    await axiosApi.delete(`/tracks/${id}`);
+  },
+);

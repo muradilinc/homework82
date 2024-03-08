@@ -25,7 +25,7 @@ export interface Album {
   author: Artist;
   tracks: Track[];
   isPublished: boolean;
-  user: User;
+  user: string;
 }
 
 export interface Track {
@@ -34,7 +34,7 @@ export interface Track {
   album: string;
   duration: string;
   isPublished: boolean;
-  user: User;
+  user: string;
 }
 
 export interface User {

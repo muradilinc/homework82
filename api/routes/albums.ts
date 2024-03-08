@@ -5,6 +5,7 @@ import mongoose, { Types } from 'mongoose';
 import Track from '../models/Tracks';
 import auth, { RequestWithUser } from '../middleware/auth';
 import permit from '../middleware/permit';
+import ignoreAuth from '../middleware/ignoreAuth';
 
 const albumsRouter = express.Router();
 
@@ -68,21 +69,30 @@ albumsRouter.get('/', async (req, res, next) => {
   }
 });
 
-albumsRouter.get('/:id', async (req, res, next) => {
-  try {
-    let _id: Types.ObjectId;
+albumsRouter.get(
+  '/:id',
+  ignoreAuth,
+  async (req: RequestWithUser, res, next) => {
     try {
-      _id = new Types.ObjectId(req.params.id as string);
-    } catch {
-      return res.status(404).send({ error: 'Wrong artist' });
+      let _id: Types.ObjectId;
+      try {
+        _id = new Types.ObjectId(req.params.id as string);
+      } catch {
+        return res.status(404).send({ error: 'Wrong artist' });
+      }
+      const result = await Albums.findById({ _id }).populate('author');
+      const tracks = await Track.find({
+        $or: [
+          { isPublished: true, album: _id },
+          { album: _id, isPublished: false, user: req.user?._id },
+        ],
+      }).sort({ number: 1 });
+      return res.send({ ...result?.toObject(), tracks });
+    } catch (error) {
+      return next(error);
     }
-    const result = await Albums.findById({ _id }).populate('author');
-    const tracks = await Track.find({ album: _id }).sort({ number: 1 });
-    return res.send({ ...result?.toObject(), tracks });
-  } catch (error) {
-    return next(error);
-  }
-});
+  },
+);
 
 albumsRouter.patch('/:id', auth, permit('admin'), async (req, res, next) => {
   try {

@@ -167,7 +167,7 @@ const run = async () => {
       author: limba,
       release: 2019,
       image: 'fixtures/albums/iathome.jpg',
-      user: user,
+      user: user1,
       isPublished: false,
     },
   );
