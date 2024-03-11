@@ -56,7 +56,6 @@ usersRouter.post('/google', async (req, res, next) => {
     });
 
     const payload = ticket.getPayload();
-
     if (!payload) {
       return res.status(400).send({ error: 'Google login is wrong!' });
     }
