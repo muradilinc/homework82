@@ -1,14 +1,15 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../store/users/usersThunk';
+import { googleLogin, login } from '../../store/users/usersThunk';
 import { routes } from '../../constants/routes';
 import { LoginMutation } from '../../type';
 import { selectLoginError } from '../../store/users/usersSlice';
+import { GoogleLogin } from '@react-oauth/google';
 
 const LoginPage = () => {
   const [state, setState] = useState<LoginMutation>({
-    username: '',
+    email: '',
     password: '',
   });
   const dispatch = useAppDispatch();
@@ -34,17 +35,22 @@ const LoginPage = () => {
     }
   };
 
+  const googleLoginHandler = async (credential: string) => {
+    await dispatch(googleLogin(credential)).unwrap();
+    navigate(routes.home);
+  };
+
   return (
     <div className="flex justify-center items-center h-[80vh]">
-      <div className="bg-[#121212] p-[20px] box-border w-[45%] rounded-[8px]">
-        <h2 className="text-center text-5xl font-bold mb-[30px]">Sign in</h2>
+      <div className="bg-[#121212] p-[20px] box-border w-[45%] rounded-[8px] flex flex-col gap-y-[30px]">
+        <h2 className="text-center text-5xl font-bold">Sign in</h2>
         <form onSubmit={sendFormHandler} className="flex flex-col gap-y-3">
           <input
             className="bg-gray-50 bg-inherit outline-0 border border-gray-300 text-white text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white"
-            value={state.username}
+            value={state.email}
             onChange={changeField}
-            name="username"
-            type="text"
+            name="email"
+            type="email"
             required
           />
           <input
@@ -63,6 +69,16 @@ const LoginPage = () => {
             sign in
           </button>
         </form>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            if (credentialResponse.credential) {
+              void googleLoginHandler(credentialResponse.credential);
+            }
+          }}
+          onError={() => {
+            console.log('Login failed');
+          }}
+        />
         <p className="text-center border-t mt-[30px] py-[30px] border-gray-500">
           No account?{' '}
           <Link className="hover:text-[#1ed760]" to={routes.signUp}>

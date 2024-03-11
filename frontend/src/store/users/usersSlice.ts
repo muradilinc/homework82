@@ -1,6 +1,6 @@
 import { AdminContent, GlobalError, User, ValidationError } from '../../type';
 import { createSlice } from '@reduxjs/toolkit';
-import { login, register } from './usersThunk';
+import { googleLogin, login, register } from './usersThunk';
 import { RootState } from '../../app/store';
 import { getContents } from './adminThunk';
 
@@ -67,6 +67,17 @@ export const usersSlice = createSlice({
       state.content = data;
     });
     builder.addCase(getContents.rejected, (state, { payload: error }) => {
+      state.adminContentLoading = true;
+      state.adminContentError = error || null;
+    });
+    builder.addCase(googleLogin.pending, (state) => {
+      state.adminContentLoading = true;
+    });
+    builder.addCase(googleLogin.fulfilled, (state, { payload: data }) => {
+      state.adminContentLoading = false;
+      state.user = data.user;
+    });
+    builder.addCase(googleLogin.rejected, (state, { payload: error }) => {
       state.adminContentLoading = true;
       state.adminContentError = error || null;
     });

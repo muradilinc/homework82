@@ -18,8 +18,7 @@ const HomePage = () => {
     <div className="my-[10px]">
       <div className="bg-gradient-to-b from-indigo-500 from-5% via-5% to-55% px-[20px] pt-[80px] pb-[20px] rounded-[8px]">
         <h2 className="text-3xl font-bold">
-          Добрый вечер{' '}
-          <span className="capitalize">{user && user.username}</span>
+          Добрый вечер <span className="capitalize">{user && user.email}</span>
         </h2>
         <div>
           <Cards data={artists} route={'artists'} />

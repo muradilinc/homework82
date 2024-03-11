@@ -27,7 +27,7 @@ const run = async () => {
     await dropCollection(db, collectionName);
   }
   await User.create({
-    username: 'admin',
+    email: 'admin@admin.com',
     password: 'admin',
     token: crypto.randomUUID(),
     role: 'admin',
@@ -35,13 +35,13 @@ const run = async () => {
 
   const [user, user1] = await User.create(
     {
-      username: 'vito',
+      email: 'vito@mafia.com',
       password: 'joe',
       token: crypto.randomUUID(),
       role: 'user',
     },
     {
-      username: 'muradil',
+      email: 'muradil@muradil.com',
       password: 'muradil',
       token: crypto.randomUUID(),
       role: 'user',

@@ -59,6 +59,27 @@ export const login = createAsyncThunk<
   }
 });
 
+export const googleLogin = createAsyncThunk<
+  RegisterResponse,
+  string,
+  { rejectValue: GlobalError }
+>('users/loginGoogle', async (credential, { rejectWithValue }) => {
+  try {
+    const response = await axiosApi.post('/users/google', { credential });
+    return response.data;
+  } catch (error) {
+    if (
+      isAxiosError(error) &&
+      error.response &&
+      error.response.status === 422
+    ) {
+      return rejectWithValue(error.response.data);
+    }
+
+    throw error;
+  }
+});
+
 export const logout = createAsyncThunk<void, undefined, { state: RootState }>(
   'users/logout',
   async (_, { dispatch }) => {

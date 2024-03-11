@@ -5,11 +5,13 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectUser } from '../../store/users/usersSlice';
 import { logout } from '../../store/users/usersThunk';
 import { getAllArtists } from '../../store/artists/artistsThunk';
+import { useState } from 'react';
 
 const Header = () => {
   const user = useAppSelector(selectUser);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [showMenu, setShowMenu] = useState(false);
 
   const logoutHandler = async () => {
     await dispatch(logout()).unwrap();
@@ -48,12 +50,22 @@ const Header = () => {
             >
               History
             </Link>
-            <button
-              className="text-[#a7a7a7] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[30px] py-[8px] px-[32px]"
-              onClick={logoutHandler}
-            >
-              logout
-            </button>
+            <div className="relative">
+              <img
+                className="rounded-[50%] w-[40px] p-[3px] bg-black"
+                src={user.avatar}
+                onClick={() => setShowMenu(!showMenu)}
+                alt="ava"
+              />
+              {showMenu ? (
+                <button
+                  className="group-hover:block text-[#a7a7a7] absolute top-[50px] left-[-60px] text-base font-bold capitalize bg-black bg-opacity-50 rounded-[30px] py-[8px] px-[32px]"
+                  onClick={logoutHandler}
+                >
+                  logout
+                </button>
+              ) : null}
+            </div>
           </div>
         ) : (
           <div className="flex gap-x-5 items-center">

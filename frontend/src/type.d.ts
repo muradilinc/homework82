@@ -40,9 +40,10 @@ export interface Track {
 
 export interface User {
   _id: string;
-  username: string;
+  email: string;
   token: string;
   role: string;
+  avatar: string;
 }
 
 export interface ValidationError {
@@ -63,12 +64,12 @@ export interface RegisterResponse {
 }
 
 export interface RegisterMutation {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface LoginMutation {
-  username: string;
+  email: string;
   password: string;
 }
 

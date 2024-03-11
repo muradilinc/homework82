@@ -7,7 +7,7 @@ import { selectRegisterError } from '../../store/users/usersSlice';
 
 const RegisterPage = () => {
   const [state, setState] = useState<RegisterMutation>({
-    username: '',
+    email: '',
     password: '',
   });
   const dispatch = useAppDispatch();
@@ -40,10 +40,10 @@ const RegisterPage = () => {
         <form onSubmit={sendFormHandler} className="flex flex-col gap-y-3">
           <input
             className="bg-gray-50 bg-inherit outline-0 border border-gray-300 text-white text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white"
-            name="username"
-            value={state.username}
+            name="email"
+            value={state.email}
             onChange={changeField}
-            type="text"
+            type="email"
             required
           />
           <input

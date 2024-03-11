@@ -27,10 +27,13 @@ export interface Track {
 }
 
 export interface UserFields {
-  username: string;
+  email: string;
   password: string;
   token: string;
   role: string;
+  displayName?: string;
+  googleID?: string;
+  avatar?: string;
 }
 
 export interface UserMethods {
