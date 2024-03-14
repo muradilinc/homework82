@@ -91,32 +91,7 @@ usersRouter.post('/google', async (req, res, next) => {
 
 usersRouter.get('/github', async (req, res, next) => {
   try {
-    const getUserGithub = async (token: string) => {
-      await fetch('https://api.github.com/user', {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
-      })
-        .then((response) => response.json())
-        .then(async (data) => {
-          let user = await User.findOne({githubID: data.id});
-          if (!user) {
-            user = new User({
-              email: data.email,
-              password: crypto.randomUUID(),
-              githubID: data.id,
-              displayName: data.name,
-              avatar: data.avatar_url,
-            });
-          }
-          user.generateToken();
-          await user.save();
-          return res.send({ message: 'Login with github successful!', user });
-        });
-    };
-
-    await fetch(
+    const response = await fetch(
       process.env['GITHUB_ACCESS_TOKEN_LINK'] +
         '?client_id=' +
         process.env['GITHUB_CLIENT_ID'] +
@@ -130,14 +105,36 @@ usersRouter.get('/github', async (req, res, next) => {
           Accept: 'application/json',
         },
       },
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        const token = data.access_token;
-        getUserGithub(token);
+    );
+    const data = await response.json();
+    const token = data.access_token;
+
+    if (!token) {
+      return res.status(400).send({ error: 'Github login is wrong!' });
+    }
+
+    const getUserGithub = await fetch('https://api.github.com/user', {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    const userGithub = await getUserGithub.json();
+
+    let user = await User.findOne({ githubID: userGithub.id });
+    if (!user) {
+      user = new User({
+        email: data.email,
+        password: crypto.randomUUID(),
+        githubID: data.id,
+        displayName: data.name,
+        avatar: data.avatar_url,
       });
+    }
+    user.generateToken();
+    await user.save();
+    return res.send({ message: 'Login with github successful!', user });
   } catch (error) {
     return next(error);
   }
