@@ -33,6 +33,7 @@ export interface UserFields {
   role: string;
   displayName?: string;
   googleID?: string;
+  githubID?: string;
   avatar?: string;
 }
 

@@ -89,6 +89,60 @@ usersRouter.post('/google', async (req, res, next) => {
   }
 });
 
+usersRouter.get('/github', async (req, res, next) => {
+  try {
+    const getUserGithub = async (token: string) => {
+      await fetch('https://api.github.com/user', {
+        method: 'GET',
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      })
+        .then((response) => response.json())
+        .then(async (data) => {
+          let user = await User.findOne({githubID: data.id});
+          if (!user) {
+            user = new User({
+              email: data.email,
+              password: crypto.randomUUID(),
+              githubID: data.id,
+              displayName: data.name,
+              avatar: data.avatar_url,
+            });
+          }
+          user.generateToken();
+          await user.save();
+          return res.send({ message: 'Login with github successful!', user });
+        });
+    };
+
+    await fetch(
+      process.env['GITHUB_ACCESS_TOKEN_LINK'] +
+        '?client_id=' +
+        process.env['GITHUB_CLIENT_ID'] +
+        '&client_secret=' +
+        process.env['GITHUB_CLIENT_SECRET'] +
+        '&code=' +
+        req.query.code,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+        },
+      },
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        const token = data.access_token;
+        getUserGithub(token);
+      });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 usersRouter.delete('/sessions', async (req, res, next) => {
   try {
     const headerValue = req.get('Authorization');

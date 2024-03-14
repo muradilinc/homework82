@@ -80,6 +80,26 @@ export const googleLogin = createAsyncThunk<
   }
 });
 
+export const githubLogin = createAsyncThunk<RegisterResponse, string, {rejectValue: GlobalError}>(
+  'users/githubLogin',
+  async (code, {rejectWithValue}) => {
+    try {
+      const response = await axiosApi.get(`/users/github?code=${code}`);
+      return response.data;
+    } catch (error) {
+      if (
+        isAxiosError(error) &&
+        error.response &&
+        error.response.status === 422
+      ) {
+        return rejectWithValue(error.response.data);
+      }
+
+      throw error;
+    }
+  }
+);
+
 export const logout = createAsyncThunk<void, undefined, { state: RootState }>(
   'users/logout',
   async (_, { dispatch }) => {

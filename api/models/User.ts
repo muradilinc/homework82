@@ -43,6 +43,7 @@ const userSchema = new Schema<UserFields, UserModel, UserMethods>({
   },
   displayName: String,
   googleID: String,
+  githubID: String,
   avatar: String,
 });
 
